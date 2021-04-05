@@ -23,3 +23,12 @@ A super simple example GraphQL API that can be hosted on AWS Lambda.
 1. Use `make deploy` to deploy to AWS with your default profile. You have to have AWS credentials set up. **Modify package.json if you want to use a different profile**.
     1. If you have not used `npm exec cdk bootstrap` before on you account, you'll need to run this once.
     1. Use `npm exec cdk destroy` to tear down the API. You may have to find and empty the generated S3 bucket manually for this to work. This will not destroy the stack created by `bootstrap`, you have to do that yourself in CloudFormation if you want it gone.
+
+
+## Roadmap
+
+What am I planning on evolving this into?
+
+- [ ] Add example database handling.
+- [ ] Add logging via `tracing` crate or similar.
+- [ ] Some sort of authentication (maybe Cognito?)

@@ -4,7 +4,7 @@ mod handler;
 use async_graphql::{EmptyMutation, EmptySubscription, Object, Schema};
 use lamedh_http::{handler, Error};
 
-use handler::GraphQLHandler;
+use handler::GraphQlHandler;
 
 struct Query;
 
@@ -18,7 +18,7 @@ impl Query {
 
 #[tokio::main(flavor = "current_thread")]
 async fn main() -> Result<(), Error> {
-    lamedh_runtime::run(handler(GraphQLHandler::new(Schema::new(
+    lamedh_runtime::run(handler(GraphQlHandler::new(Schema::new(
         Query,
         EmptyMutation,
         EmptySubscription,

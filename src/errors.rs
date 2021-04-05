@@ -12,7 +12,7 @@ pub(crate) enum ServerError {
 pub(crate) enum ClientError {
     #[error(transparent)]
     Query(#[from] async_graphql::ParseRequestError),
-    #[error(transparent)]
+    #[error("Could not parse JSON body")]
     Json(#[from] serde_json::Error),
     #[error("POST request must contain a body")]
     EmptyBody,
