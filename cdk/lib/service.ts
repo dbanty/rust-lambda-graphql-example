@@ -7,20 +7,18 @@ export class Service extends core.Construct {
     constructor(scope: core.Construct, id: string) {
         super(scope, id);
 
-        const bucket = new s3.Bucket(this, "GraphQLBucket", {
-            removalPolicy: core.RemovalPolicy.DESTROY
-        });
-
         const handler = new lambda.Function(this, "Function", {
             runtime: lambda.Runtime.PROVIDED_AL2,
+            functionName: "GraphQLAPI",
             code: lambda.Code.fromAsset("bootstrap"),
             handler: "unused",
+            timeout: core.Duration.seconds(30),
             environment: {
-                BUCKET: bucket.bucketName
+                DATABASE_URL: "postgres://postgres:local_password@host.docker.internal/postgres",
+                RUST_LOG: "debug",
             }
         });
 
-        bucket.grantReadWrite(handler);
 
         new apigateway.LambdaRestApi(this, "API", {
             handler,

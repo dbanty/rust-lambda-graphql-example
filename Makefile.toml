@@ -1,0 +1,37 @@
+[env]
+DATABASE_URL="postgres://postgres:local_password@127.0.0.1/postgres"
+
+[tasks.docker]
+command = "docker-compose"
+args = ["up", "-d"]
+
+[tasks.bootstrap]
+dependencies = ["docker"]
+script = """
+cargo build --release --target x86_64-unknown-linux-musl
+rm -rf bootstrap
+mkdir "bootstrap"
+cp ./target/x86_64-unknown-linux-musl/release/graphql-example bootstrap/bootstrap
+"""
+
+[tasks.deploy]
+dependencies = ["bootstrap"]
+command = "npm"
+args = ["run", "deploy"]
+
+[tasks.local]
+dependencies = ["docker", "bootstrap"]
+script = """
+npm run template
+sam local start-api
+"""
+
+[tasks.lint]
+dependencies = ["docker"]
+command = "cargo"
+args = ["clippy"]
+
+[tasks.test]
+dependencies = ["docker"]
+command = "cargo"
+args = ["test"]
