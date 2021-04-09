@@ -13,3 +13,10 @@ lamedh_http = "0.3.0"
 thiserror = "1.0.24"
 aws_lambda_events = "0.4.0"
 http = "0.2.3"
+sqlx = { version = "0.5.1", features = [ "runtime-tokio-rustls", "postgres", "macros" ] }
+tracing = "0.1.25"
+tracing-futures = "0.2.5"
+tracing-subscriber = { version = "0.2.17", features = ["registry", "env-filter"] }
+tracing-bunyan-formatter = { version = "0.2.0", default-features = false }
+tracing-log = "0.1.2"
+

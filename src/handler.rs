@@ -15,6 +15,7 @@ use lamedh_http::{Context, Handler, Request, RequestExt, Response};
 
 use crate::errors::{ClientError, ServerError};
 use std::fmt::Display;
+use tracing_futures::Instrument;
 
 pub(crate) struct GraphQlHandler<Query, Mutation, Subscription>
 where
@@ -59,9 +60,13 @@ where
     type Fut = Pin<Box<dyn Future<Output = HandlerResult> + 'static>>;
 
     fn call(&mut self, req: Request, _ctx: Context) -> Self::Fut {
+        let span = tracing::trace_span!("GraphQlHandler");
+        let _guard = span.enter();
+        tracing::trace!("Received request, starting handler.");
+        let handle_request_span = tracing::trace_span!("GraphQlHandler");
         let schema = self.schema.clone();
         let fut = async move { handle_request(schema, req).await };
-        Box::pin(fut)
+        Box::pin(fut.instrument(handle_request_span))
     }
 }
 
@@ -76,6 +81,7 @@ where
 {
     let path = request.uri().path();
     if path == "/" {
+        tracing::info!("Serving GraphiQL UI");
         Response::builder()
             .header("Content-Type", "text/html")
             .body(async_graphql::http::graphiql_source(
@@ -84,8 +90,11 @@ where
             ))
             .map_err(ServerError::from)
     } else if path.ends_with("/graphql") {
-        handle_query(schema, request).await
+        tracing::info!("Handling GraphQL query");
+        let query_span = tracing::info_span!("handle_query");
+        handle_query(schema, request).instrument(query_span).await
     } else {
+        tracing::warn!("Unknown path, returning error.");
         error_response(http::StatusCode::NOT_FOUND, "Invalid path".to_string())
     }
 }
