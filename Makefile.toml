@@ -2,8 +2,10 @@
 DATABASE_URL="postgres://postgres:local_password@localhost/postgres"
 
 [tasks.docker]
-command = "docker-compose"
-args = ["up", "-d"]
+script = """
+docker-compose up -d
+sleep 5
+"""
 
 [tasks.bootstrap]
 dependencies = ["docker"]

@@ -2,7 +2,7 @@ mod errors;
 mod handler;
 
 use async_graphql::{
-    Context, EmptyMutation, EmptySubscription, Object, Result as GraphQlResult, Schema,
+    Context, EmptySubscription, Object, Result as GraphQlResult, Schema, SimpleObject,
 };
 use lamedh_http::{handler, Error};
 use sqlx::postgres::PgPoolOptions;
@@ -17,24 +17,46 @@ use tracing_log::LogTracer;
 use tracing_subscriber::layer::SubscriberExt;
 use tracing_subscriber::{EnvFilter, Registry};
 
+#[derive(SimpleObject)]
+struct User {
+    id: i32,
+    name: String,
+}
+
 struct Query;
 
 #[Object]
 impl Query {
-    /// Returns the sum of a and b
-    async fn value(&self, ctx: &Context<'_>) -> GraphQlResult<i32> {
-        tracing::info!("Starting value");
-        let span = tracing::info_span!("Querying Postgres");
-        let pool = dbg!(ctx.data_unchecked::<PgPool>());
-        tracing::info!("Got pool");
-        let row: (i32,) = sqlx::query_as("SELECT $1")
-            .bind(150_i32)
-            .fetch_one(pool)
+    async fn users(&self, ctx: &Context<'_>) -> GraphQlResult<Vec<User>> {
+        let span = tracing::info_span!("Querying users");
+
+        let pool = ctx.data_unchecked::<PgPool>();
+        let users: Vec<User> = sqlx::query_as!(User, "SELECT id, name FROM users")
+            .fetch_all(pool)
             .instrument(span)
             .await
             .map_err(ServerError::from)?;
         tracing::info!("Finished query");
-        Ok(row.0)
+        Ok(users)
+    }
+}
+
+struct Mutation;
+
+#[Object]
+impl Mutation {
+    async fn create_user(&self, ctx: &Context<'_>, name: String) -> GraphQlResult<i32> {
+        let span = tracing::info_span!("Querying users");
+
+        let pool = ctx.data_unchecked::<PgPool>();
+        let result: i32 =
+            sqlx::query_scalar!("INSERT INTO users (name) VALUES ($1) RETURNING id", name)
+                .fetch_one(pool)
+                .instrument(span)
+                .await
+                .map_err(ServerError::from)?;
+        tracing::info!("Finished query");
+        Ok(result)
     }
 }
 
@@ -72,16 +94,16 @@ async fn setup_database() -> Result<PgPool, sqlx::Error> {
         .await
 }
 
-async fn create_schema() -> Result<Schema<Query, EmptyMutation, EmptySubscription>, ServerError> {
+async fn create_schema() -> Result<Schema<Query, Mutation, EmptySubscription>, ServerError> {
     let pool = setup_database().await.map_err(ServerError::from)?;
-    Ok(Schema::build(Query, EmptyMutation, EmptySubscription)
+    Ok(Schema::build(Query, Mutation, EmptySubscription)
         .data(pool)
         .finish())
 }
 
 #[cfg(test)]
 mod tests {
-    use crate::{setup_database, setup_tracing};
+    use crate::setup_database;
 
     #[tokio::test]
     async fn test_setup_database() {
@@ -92,16 +114,24 @@ mod tests {
 }
 
 #[cfg(test)]
-mod test_query {
+mod test_users {
+    use serde_json::json;
+
     use crate::create_schema;
 
     #[tokio::test]
-    async fn test_value() {
+    async fn test_create_and_get_user() {
         let schema = create_schema().await.unwrap();
-        let res = schema.execute("{value}").await;
-        assert_eq!(
-            serde_json::to_string(&res).unwrap(),
-            "{\"data\":{\"value\":150}}"
-        );
+        let res = schema.execute("mutation {createUser(name: \"Bob\")}").await;
+        let id = res.data.into_json().expect("Result was not JSON")["createUser"]
+            .as_u64()
+            .expect("Result was not u64");
+        let res = schema
+            .execute("{users{id, name}}")
+            .await
+            .data
+            .into_json()
+            .unwrap();
+        assert_eq!(res, json!({"users": [{"name": "Bob", "id": id}]}))
     }
 }
