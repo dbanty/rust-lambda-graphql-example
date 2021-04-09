@@ -1,10 +1,9 @@
 {
   "name": "cdk",
   "version": "0.1.0",
-  "bin": "bin/cdk.js",
   "scripts": {
     "deploy": "cdk deploy",
-    "template": "cdk synth --no-staging > template.yaml"
+    "template": "cdk synth --no-staging > ../template.yaml"
   },
   "devDependencies": {
     "@aws-cdk/assert": "^1.97.0",

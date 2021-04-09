@@ -1,18 +1,19 @@
-import * as core from "@aws-cdk/core";
+#!/usr/bin/env node
+import 'source-map-support/register';
+import * as cdk from '@aws-cdk/core';
 import * as apigateway from "@aws-cdk/aws-apigateway";
 import * as lambda from "@aws-cdk/aws-lambda";
-import * as s3 from "@aws-cdk/aws-s3";
 
-export class Service extends core.Construct {
-    constructor(scope: core.Construct, id: string) {
+export class Service extends cdk.Construct {
+    constructor(scope: cdk.Construct, id: string) {
         super(scope, id);
 
         const handler = new lambda.Function(this, "Function", {
             runtime: lambda.Runtime.PROVIDED_AL2,
             functionName: "GraphQLAPI",
-            code: lambda.Code.fromAsset("bootstrap"),
+            code: lambda.Code.fromAsset("../bootstrap"),
             handler: "unused",
-            timeout: core.Duration.seconds(30),
+            timeout: cdk.Duration.seconds(5),
             environment: {
                 DATABASE_URL: "postgres://postgres:local_password@host.docker.internal/postgres",
                 RUST_LOG: "debug",
@@ -27,3 +28,14 @@ export class Service extends core.Construct {
         });
     }
 }
+
+export class CdkStack extends cdk.Stack {
+    constructor(scope: cdk.Construct, id: string, props?: cdk.StackProps) {
+        super(scope, id, props);
+
+        new Service(this, "Service");
+    }
+}
+
+const app = new cdk.App();
+new CdkStack(app, 'CdkStack');

@@ -66,17 +66,10 @@ fn setup_tracing() {
 async fn setup_database() -> Result<PgPool, sqlx::Error> {
     let db_url = std::env::var("DATABASE_URL").unwrap();
     tracing::debug!("Got {} as DB URL", &db_url);
-    let pool = PgPoolOptions::new()
+    PgPoolOptions::new()
         .max_connections(5)
         .connect(&db_url)
-        .await?;
-    tracing::debug!("Attempting to query database");
-    let row: (i32,) = sqlx::query_as("SELECT $1")
-        .bind(150_i32)
-        .fetch_one(&pool)
-        .await?;
-    tracing::info!("{}", row.0);
-    Ok(pool)
+        .await
 }
 
 async fn create_schema() -> Result<Schema<Query, EmptyMutation, EmptySubscription>, ServerError> {

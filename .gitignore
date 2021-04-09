@@ -7,5 +7,4 @@
 
 # CDK
 /cdk.out/
-/node_modules/
 template.yaml

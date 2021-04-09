@@ -1,5 +1,5 @@
 [env]
-DATABASE_URL="postgres://postgres:local_password@127.0.0.1/postgres"
+DATABASE_URL="postgres://postgres:local_password@localhost/postgres"
 
 [tasks.docker]
 command = "docker-compose"
@@ -17,12 +17,13 @@ cp ./target/x86_64-unknown-linux-musl/release/graphql-example bootstrap/bootstra
 [tasks.deploy]
 dependencies = ["bootstrap"]
 command = "npm"
-args = ["run", "deploy"]
+args = ["run", "--prefix cdk", "deploy"]
 
 [tasks.local]
 dependencies = ["docker", "bootstrap"]
+env = {DATABASE_URL="postgres://postgres:local_password@host.docker.internal/postgres"}
 script = """
-npm run template
+npm run --prefix cdk template
 sam local start-api
 """
 
