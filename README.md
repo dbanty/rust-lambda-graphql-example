@@ -34,6 +34,5 @@ A super simple example GraphQL API that can be hosted on AWS Lambda.
 
 What am I planning on evolving this into?
 
-- [ ] Add example database handling.
+- [x] Add example database handling.
 - [x] Add logging via `tracing` crate or similar.
-- [ ] Some sort of authentication (maybe Cognito?)
