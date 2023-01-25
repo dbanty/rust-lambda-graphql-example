@@ -12,7 +12,7 @@
     "@aws-cdk/aws-s3": "^1.97.0",
     "@aws-cdk/core": "^1.97.0",
     "@aws-cdk/yaml-cfn": "^1.97.0",
-    "@types/node": "10.17.27",
+    "@types/node": "10.17.60",
     "aws-cdk": "^1.97.0",
     "aws-sdk": "^2.882.0",
     "cdk-assets": "^1.97.0",
