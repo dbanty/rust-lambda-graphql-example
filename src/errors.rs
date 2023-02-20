@@ -6,8 +6,6 @@ pub(crate) enum ServerError {
     Disconnect(#[from] serde_json::Error),
     #[error("error creating response")]
     Response(#[from] http::Error),
-    #[error("error communicating with database")]
-    Database(#[from] sqlx::Error),
 }
 
 #[derive(Error, Debug)]
