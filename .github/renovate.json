@@ -1,6 +1,14 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "extends": [
-    "config:base"
+    "config:base",
+    ":semanticCommits",
+    ":semanticCommitTypeAll(chore)"
+  ],
+  "packageRules": [
+    {
+      "matchPackagePatterns": ["aws_lambda_events", "lambda_http", "lambda_runtime"],
+      "groupName": "lambda"
+    }
   ]
 }
