@@ -4,27 +4,21 @@ A super simple example GraphQL API that can be hosted on AWS Lambda.
 
 ## What's in the box?
 
-1. `src` contains the code to integrate the `async-graphql` crate with the `lamedh` crates for a serverless GraphQL experience. You can hit the root `/` path to see a `GraphiQL` UI or the `/graphql` path to make queries.
-2. The `cdk` directory contains all the infrastructure as code, `cdk/cdk.ts` is where you'll want to tweak your own 
-   infrastructure.
-3. `Makefile.toml` contains a couple useful rules for working with this project (uses `cargo-make`).
-4. `docker-compose.yml` contains a basic Postgres setup that all the rules in this project use for testing/running.
+1. `src` contains the code to integrate the `async-graphql` crate with the `lambda` crates for a serverless GraphQL experience. Both POST and GET queries are supported on any path.
+2. `.github` contains Renovate support for keeping dependencies up to date.
+3. `.github/workflows` contains a GitHub Actions workflow that will build and test the code on every push as well as deploy on pushes to main. There is also an integration test which runs after deploy.
 
-## To Set Up (macOS)
+This is set up for the most simple use-case: a [function URL](https://docs.aws.amazon.com/lambda/latest/dg/lambda-urls.html). You will need to make some tweaks to get this working with API Gateway.
 
-1. Install node: `brew install node`
-2. Install node dependencies: `npm install --prefix cdk`
-3. Install cargo-make: `cargo install cargo-make`
-4. Install AWS SAM CLI for local development: `pipx install aws-sam-cli` (or `pip` or `brew` if you prefer)
-5. Setup MUSL cross-compile toolchain (since that's what lambda runtime needs):
-    1. Add MUSL target: `rustup target add x86_64-unknown-linux-musl`
-    2. Install MUSL cross-compile tool: `brew install FiloSottile/musl-cross/musl-cross`
-    3. Soft link musl-gcc: `ln -s /usr/local/bin/x86_64-linux-musl-gcc /usr/local/bin/musl-gcc`
+## To Set Up
+
+1. Install [cargo-lambda](https://www.cargo-lambda.info/guide/getting-started.html)
+2. Install [Zig](https://ziglang.org/download/) (needed by cargo-lambda)
+3. An [AWS credentials file](https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-files.html) (for deploying only)
 
 ## How to use?
 
-1. Use `makers local` to run the API locally. This will use CDK to generate a template for SAM CLI, then use SAM CLI to 
-  run locally. **This rule requires Docker and SAM CLI to be installed**.
-2. Use `makers deploy` to deploy to AWS with your default profile. You have to have AWS credentials set up. **Modify package.json or Makefile.toml if you want to use a different profile**.
-    1. If you have not used `npm exec --prefix cdk cdk bootstrap` before on you account, you'll need to run this once.
-    2. Use `npm exec --prefix cdk cdk destroy` to tear down the API. You may have to find and empty the generated S3 bucket manually for this to work. This will not destroy the stack created by `bootstrap`, you have to do that yourself in CloudFormation if you want it gone.
+1. `cargo lambda watch` will start the service _lazily_ (only compiles when the first request comes in), then watch and reload your code on changes. The URL will be `http://localhost:9000/lambda-url/graphql-example` (where graphql-example is the name of the binary once you change it).
+2. To deploy, first run `cargo lambda build --release --arm64` (for graviton processors) then `cargo lambda deploy`.
+3. To get the GitHub Actions to deploy on push to main, you need to set two GitHub Secrets for AIM credentials: `AWS_ACCESS_KEY_ID` and `AWS_SECRET_ACCESS_KEY`.
+4. For the integration tests to work, fill in the `FUNCTION_URL` secret with the URL of the deployed function. This assumes that the same AWS credentials which can deploy the function can invoke it—if this isn't true, you'll need to tweak the `integration_test` job in `.github/workflows/release.yml`. It also assumes that your function is secured with the AWS_IAM type of [function security](https://docs.aws.amazon.com/lambda/latest/dg/urls-auth.html). You'll need to tweak this job as soon as you change the schema.
