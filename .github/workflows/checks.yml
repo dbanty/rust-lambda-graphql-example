@@ -11,6 +11,7 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - run: rustup toolchain install nightly
+      - run: rustup component add rustfmt --toolchain nightly
       - run: cargo +nightly fmt --check --all
   test:
     runs-on: ubuntu-latest
