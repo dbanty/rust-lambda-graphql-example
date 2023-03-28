@@ -150,6 +150,24 @@ dependencies = [
 ]
 
 [[package]]
+name = "aws_lambda_events"
+version = "0.8.2"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "765f8851eb42f7c040e9ac68cb762a5aaa6f98c1144ba7ab1d1a1bbe173a5019"
+dependencies = [
+ "base64",
+ "bytes",
+ "chrono",
+ "http",
+ "http-body",
+ "http-serde",
+ "query_map",
+ "serde",
+ "serde_derive",
+ "serde_json",
+]
+
+[[package]]
 name = "base64"
 version = "0.13.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -182,9 +200,11 @@ version = "0.4.19"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "670ad68c9088c2a963aaa298cb369688cf3f9465ce5e2d4ca10e6e0098a1ce73"
 dependencies = [
+ "libc",
  "num-integer",
  "num-traits",
  "serde",
+ "winapi",
 ]
 
 [[package]]
@@ -343,7 +363,7 @@ name = "graphql-example"
 version = "0.1.0"
 dependencies = [
  "async-graphql",
- "aws_lambda_events",
+ "aws_lambda_events 0.8.2",
  "http",
  "lambda_http",
  "lambda_runtime",
@@ -483,7 +503,7 @@ version = "0.7.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "16fd842ce9fc6908f1688030cf8b6841e2009bd874eb21244f124570ac06264f"
 dependencies = [
- "aws_lambda_events",
+ "aws_lambda_events 0.7.3",
  "base64",
  "bytes",
  "encoding_rs",
