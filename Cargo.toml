@@ -5,7 +5,7 @@ authors = ["Dylan Anthony <contact@dylananthony.com>"]
 edition = "2021"
 
 [dependencies]
-async-graphql = { version = "5.0.9", features = ["tracing"], default-features = false }
+async-graphql = { version = "5.0.10", features = ["tracing"], default-features = false }
 aws_lambda_events = { version = "0.7.3", default-features = false }
 http = "0.2.9"
 lambda_http = "0.8.0"
