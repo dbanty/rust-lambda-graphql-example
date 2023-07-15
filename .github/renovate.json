@@ -9,6 +9,10 @@
     {
       "matchPackagePatterns": ["aws_lambda_events", "lambda_http", "lambda_runtime"],
       "groupName": "lambda"
+    },
+    {
+      "matchUpdateTypes": ["minor", "patch", "pin", "digest"],
+      "automerge": true
     }
   ]
 }
