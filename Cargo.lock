@@ -38,9 +38,9 @@ dependencies = [
 
 [[package]]
 name = "async-graphql"
-version = "6.0.7"
+version = "6.0.9"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "1addb0b551c59640e15de99e7566a4e3a1186cf42269e160c485ba6d8b43fe30"
+checksum = "117113a7ff4a98f2a864fa7a5274033b0907fce65dc8464993c75033f8074f90"
 dependencies = [
  "async-graphql-derive",
  "async-graphql-parser",
@@ -70,9 +70,9 @@ dependencies = [
 
 [[package]]
 name = "async-graphql-derive"
-version = "6.0.7"
+version = "6.0.9"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "1e1121ff0be2feea705c24f6940162c4f14a077e50a217b16e091e6534a8c08a"
+checksum = "6e4bb7b7b2344d24af860776b7fe4e4ee4a67cd965f076048d023f555703b854"
 dependencies = [
  "Inflector",
  "async-graphql-parser",
@@ -87,9 +87,9 @@ dependencies = [
 
 [[package]]
 name = "async-graphql-parser"
-version = "6.0.7"
+version = "6.0.9"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "e0b6713fd4ffd610b8b6f6e911bf31277cbb84b7c2a9cdeeb39d1b3eed3b88e4"
+checksum = "c47e1c1ff6cb7cae62c9cd768d76475cc68f156d8234b024fd2499ad0e91da21"
 dependencies = [
  "async-graphql-value",
  "pest",
@@ -99,9 +99,9 @@ dependencies = [
 
 [[package]]
 name = "async-graphql-value"
-version = "6.0.7"
+version = "6.0.9"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "f7d74240f9daa8c1e8f73e9cfcc338d20a88d00bbeb83ded49ce8e5b4dcec0f5"
+checksum = "2270df3a642efce860ed06fbcf61fc6db10f83c2ecb5613127fb453c82e012a4"
 dependencies = [
  "bytes",
  "indexmap 2.0.0",
@@ -721,10 +721,11 @@ checksum = "478c572c3d73181ff3c2539045f6eb99e5491218eae919370993b890cdbdd98e"
 
 [[package]]
 name = "pest"
-version = "2.6.0"
+version = "2.7.4"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "e68e84bfb01f0507134eac1e9b410a12ba379d064eab48c50ba4ce329a527b70"
+checksum = "c022f1e7b65d6a24c0dbbd5fb344c66881bc01f3e5ae74a1c8100f2f985d98a4"
 dependencies = [
+ "memchr",
  "thiserror",
  "ucd-trie",
 ]
