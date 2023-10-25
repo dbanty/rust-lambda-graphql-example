@@ -5,6 +5,7 @@
     ":semanticCommits",
     ":semanticCommitTypeAll(chore)"
   ],
+  "lockFileMaintenance": { "enabled": true, "automerge": true },
   "packageRules": [
     {
       "matchPackagePatterns": ["aws_lambda_events", "lambda_http", "lambda_runtime"],
