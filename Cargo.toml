@@ -7,7 +7,7 @@ edition = "2021"
 [dependencies]
 async-graphql = { version = "6.0.10", features = ["tracing"], default-features = false }
 aws_lambda_events = { version = "0.12.0", default-features = false }
-http = "0.2.9"
+http = "0.2.10"
 lambda_http = "0.8.3"
 lambda_runtime = "0.8.3"
 lazy_static = "1.4.0"
