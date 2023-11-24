@@ -1,5 +1,9 @@
 on: push
 
+env:
+  # renovate: datasource=github-releases depName=zig lookupName=ziglang/zig
+  ZIG_VERSION: 0.10.0
+
 jobs:
   lint:
     runs-on: ubuntu-latest
@@ -25,8 +29,7 @@ jobs:
       - name: Install Zig toolchain
         uses: korandoru/setup-zig@v1
         with:
-          # renovate: datasource=github-releases depName=zig lookupName=ziglang/zig
-          zig-version: 0.10.0
+          zig-version: ${{ env.ZIG_VERSION }}
       - name: Install Cargo Lambda
         uses: jaxxstorm/action-install-gh-release@v1.10.0
         with:
