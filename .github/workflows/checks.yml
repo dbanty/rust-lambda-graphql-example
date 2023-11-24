@@ -25,12 +25,12 @@ jobs:
       - name: Install Zig toolchain
         uses: korandoru/setup-zig@v1
         with:
+          # renovate: datasource=github-releases depName=zig lookupName=ziglang/zig
           zig-version: 0.10.0
       - name: Install Cargo Lambda
         uses: jaxxstorm/action-install-gh-release@v1.10.0
         with:
           repo: cargo-lambda/cargo-lambda
-          tag: v0.14.0 # Remove this if you want to grab always the latest version
-          platform: linux # Other valid options: 'windows' or 'darwin'
-          arch: x86_64 # Other valid options for linux: 'aarch64'
+          platform: linux
+          arch: x86_64
       - run: cargo lambda build --arm64

@@ -3,7 +3,8 @@
   "extends": [
     "config:base",
     ":semanticCommits",
-    ":semanticCommitTypeAll(chore)"
+    ":semanticCommitTypeAll(chore)",
+    "regexManagers:githubActionsVersions"
   ],
   "lockFileMaintenance": { "enabled": true, "automerge": true },
   "packageRules": [
