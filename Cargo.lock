@@ -534,9 +534,9 @@ checksum = "b1a46d1a171d865aa5f83f92695765caa047a9b4cbae2cbf37dbd613a793fd4c"
 
 [[package]]
 name = "lambda_http"
-version = "0.9.1"
+version = "0.9.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "ad7732ab05100525c1716db7b48ccf2165da4dcd72340f679fea593766f4f042"
+checksum = "dacbb68e7ae5264884f114f79d4e0de33c66cb5a8f363ac93de7112f624d233d"
 dependencies = [
  "aws_lambda_events",
  "base64 0.21.7",
