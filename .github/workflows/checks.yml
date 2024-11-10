@@ -31,7 +31,7 @@ jobs:
         with:
           zig-version: ${{ env.ZIG_VERSION }}
       - name: Install Cargo Lambda
-        uses: jaxxstorm/action-install-gh-release@v1.12.0
+        uses: jaxxstorm/action-install-gh-release@v1.13.0
         with:
           repo: cargo-lambda/cargo-lambda
           platform: linux
