@@ -5,7 +5,7 @@ on:
 
 env:
   # renovate: datasource=github-releases depName=zig lookupName=ziglang/zig
-  ZIG_VERSION: 0.14.0
+  ZIG_VERSION: 0.14.1
 
 jobs:
   deploy:
