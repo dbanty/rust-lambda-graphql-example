@@ -2,7 +2,7 @@ on: push
 
 env:
   # renovate: datasource=github-releases depName=zig lookupName=ziglang/zig
-  ZIG_VERSION: 0.14.1
+  ZIG_VERSION: 0.15.1
 
 jobs:
   lint:
